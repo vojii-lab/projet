@@ -1,5 +1,5 @@
 /* USER CODE BEGIN Header */
-//Team A
+//Team A&B
 /**
   ******************************************************************************
   * @file           : main.c
@@ -77,6 +77,9 @@
 	volatile float postx = 0;
 	float posdino = 0;
 	
+	uint8_t pos;
+	uint8_t id;
+	
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -104,6 +107,19 @@ void HAL_SYSTICK_Callback(void) {
 	}
 }
 
+uint8_t data[4] = {255,0,0,254};
+uint8_t Rx_data[4];
+uint8_t count = 0;
+
+//RECEIVE
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+	for(int i=0; i<4; i++){
+		if(Rx_data[i] == 255 && Rx_data[(i+3)%4]){
+			pos = Rx_data[(i+1)%4];
+			id = Rx_data[(i+2)%4];
+		}
+	}
+}
 
 /* USER CODE END 0 */
 
@@ -150,7 +166,11 @@ int main(void)
 	 
 	 //on start le timer de l'écho qui est en input capture//
 	 HAL_TIM_IC_Start_IT(&htim3, TIM_CHANNEL_3);
-	 
+
+//INITIALISATION OUT IN
+HAL_UART_Transmit_DMA(&huart5, data, sizeof(data));
+HAL_UART_Receive_DMA(&huart5, Rx_data, sizeof(Rx_data));
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -244,7 +264,7 @@ PUTCHAR_PROTOTYPE
 /* Place your implementation of fputc here */
 /* e.g. write a character to the USART2 and Loop until the end
 of transmission */
-HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+HAL_UART_Transmit(&huart5, (uint8_t *)&ch, 1, 0xFFFF);
 return ch;
 }
 
