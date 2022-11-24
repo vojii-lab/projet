@@ -73,9 +73,10 @@
 	
 	float scale = 210.0/25.0;                     // le scale est la valeur maximale voulu / l'écart max entre les mesures (30-5 = 25)
 	volatile float compteur = 0;
-	volatile float flag_no_detection = 0; 
+	float flag_no_detection = 0; 
 	volatile float postx = 0;
 	float posdino = 0;
+
 	
 	uint8_t pos;
 	uint8_t id;
@@ -119,6 +120,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 			id = Rx_data[(i+2)%4];
 		}
 	}
+
 }
 
 /* USER CODE END 0 */
@@ -176,6 +178,7 @@ HAL_UART_Receive_DMA(&huart5, Rx_data, sizeof(Rx_data));
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
+	
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -188,15 +191,16 @@ HAL_UART_Receive_DMA(&huart5, Rx_data, sizeof(Rx_data));
 	
 		moveAvatar(&avatar);
 		moveObstacle(&obstacle);
+		data[1] += 1;
+		data[2] += 2;
 		
 		// si l'objet est plus loin que 30 cm trois fois de suite, alors on envoie un obstacle
 		if(flag_no_detection == 1){  // pour le test, on n'envoie pas un obstacle, mais on affiche une ligne ou la position devrait etre. 
-		LCD_DrawLine(100, postx, 110, postx, WHITE);
+			LCD_DrawLine(100, postx, 110, postx, WHITE);
 		}
 		
 		
 		gameover = lookColision(&avatar, &obstacle);
-		
 		if (gameover) {
 			HAL_Delay(5000);
 				initGame(&avatar, &obstacle);
