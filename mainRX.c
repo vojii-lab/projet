@@ -1,4 +1,5 @@
 /* USER CODE BEGIN Header */
+//Team B
 /**
   ******************************************************************************
   * @file           : main.c
@@ -119,7 +120,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
 
 //RECEIVE
 /*void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart){
-	//fait un truc à la moitié
+	//fait un truc Ã  la moitiÃ©
 }*/
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
