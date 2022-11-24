@@ -9,6 +9,7 @@
 #define COLOR_BACKGROUND 0x0000 // BLACK
 
 extern uint8_t posdinoRecu;
+extern uint8_t idRecu;
 extern volatile float flag_no_detection;
 extern float posdino;
 struct Avatar {
