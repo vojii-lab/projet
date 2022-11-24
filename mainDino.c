@@ -1,4 +1,5 @@
 /* USER CODE BEGIN Header */
+//Team A
 /**
   ******************************************************************************
   * @file           : main.c
@@ -70,7 +71,7 @@
 	
 	// parametre pour faire bouger le dino et envoyer les obstacles
 	
-	float scale = 210.0/25.0;                     // le scale est la valeur maximale voulu / l'Ècart max entre les mesures (30-5 = 25)
+	float scale = 210.0/25.0;                     // le scale est la valeur maximale voulu / l'√©cart max entre les mesures (30-5 = 25)
 	volatile float compteur = 0;
 	volatile float flag_no_detection = 0; 
 	volatile float postx = 0;
@@ -147,7 +148,7 @@ int main(void)
   // on start le timer du trig qui est en pwm //
 	 HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 	 
-	 //on start le timer de l'Ècho qui est en input capture//
+	 //on start le timer de l'√©cho qui est en input capture//
 	 HAL_TIM_IC_Start_IT(&htim3, TIM_CHANNEL_3);
 	 
   /* USER CODE END 2 */
@@ -248,7 +249,7 @@ return ch;
 }
 
 // on n'a pas besoin de callback le trig, puisqu'il n'y a rien a ajouter
-// on doit callback le echo ‡ la fin de la cpture pour faire la difference entre les valeurs mesurÈes sur le front montant et descendant
+// on doit callback le echo √† la fin de la cpture pour faire la difference entre les valeurs mesur√©es sur le front montant et descendant
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim3)
 {
 	if (htim3->Channel == HAL_TIM_ACTIVE_CHANNEL_3)
@@ -276,7 +277,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim3)
 					distance = difference_capteur/58.82;
 					
 									
-					if (distance < 5){                         // cas limite 1:  si la distance est petite que 5, alors le dino ne bouge pas et reste ‡ 0
+					if (distance < 5){                         // cas limite 1:  si la distance est petite que 5, alors le dino ne bouge pas et reste √† 0
 						posdino = 0;
 						compteur = 0;
 					}
@@ -286,12 +287,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim3)
 					}			
 					else if (distance >= 35)                   //  cas limite 3: si la distance est plus grande que 35 cm
 						{
-							compteur ++;                           // on incrÈmente le compteur
-							if (compteur >= 3)                     // et on check si le compteur a atteint 3 (3 lectures de 35 cm consÈcutif)
+							compteur ++;                           // on incr√©mente le compteur
+							if (compteur >= 3)                     // et on check si le compteur a atteint 3 (3 lectures de 35 cm cons√©cutif)
 								{
 							    flag_no_detection = 1;             // on set le flag a 1, pour trigger l'envoi des obstacles
-									compteur = 0;                      // et on remet le compteur ‡ 0
-									postx = posdino;               // et la position envoyÈ (hauteur de l'obstacle) sera la derniere position de notre avatar
+									compteur = 0;                      // et on remet le compteur √† 0
+									postx = posdino;               // et la position envoy√© (hauteur de l'obstacle) sera la derniere position de notre avatar
 								}
 				    }
 						else {                                   // cas voulu: si la distance est entre 5 et 30
