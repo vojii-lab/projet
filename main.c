@@ -76,11 +76,16 @@
 	volatile float flag_no_detection = 0; 
 	volatile float postx = 0;
 	float posdino = 0;
+	float iddino = 0;
+	
 	uint8_t posdinoRecu=0;
+	uint8_t idRecu=0;
+	
+	uint8_t pos;
+	uint8_t id;
 
 	
-//	uint8_t pos;
-	uint8_t id;
+
 	
 /* USER CODE END PV */
 
@@ -118,10 +123,15 @@ uint8_t count = 0;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	for(int i=0; i<4; i++){
 		if(Rx_data[i] == 255 && Rx_data[(i+3)%4]){
-			posdinoRecu = Rx_data[(i+1)%4];
+			pos = Rx_data[(i+1)%4];
 			id = Rx_data[(i+2)%4];
 		}
 	}
+	if(id != 0){
+			posdinoRecu = pos;
+			idRecu = id;
+		}
+	id = 0;
 
 }
 
@@ -194,13 +204,14 @@ HAL_UART_Receive_DMA(&huart5, Rx_data, sizeof(Rx_data));
 		moveAvatar(&avatar);
 		moveObstacle(&obstacle);
 		data[1] = posdino;
-		data[2] += 2;
+		data[2] = iddino;
 		
 		// si l'objet est plus loin que 30 cm trois fois de suite, alors on envoie un obstacle
 		if(flag_no_detection == 1){  // pour le test, on n'envoie pas un obstacle, mais on affiche une ligne ou la position devrait etre. 
 			LCD_DrawLine(100, postx, 110, postx, WHITE);
 		}
-		flag_no_detection = 0; 
+		flag_no_detection = 0;
+		iddino = 0;
 		
 		
 		gameover = lookColision(&avatar, &obstacle);
@@ -319,7 +330,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim3)
 								{
 							    flag_no_detection = 1;             // on set le flag a 1, pour trigger l'envoi des obstacles
 									compteur = 0;                      // et on remet le compteur à 0
-									postx = posdino;               // et la position envoyé (hauteur de l'obstacle) sera la derniere position de notre avatar
+									postx = posdino;
+                  iddino = 4; 									// et la position envoyé (hauteur de l'obstacle) sera la derniere position de notre avatar
 								}
 				    }
 						else {                                   // cas voulu: si la distance est entre 5 et 30
