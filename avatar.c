@@ -203,8 +203,7 @@ void moveObstacle(struct Obstacle *obstacle){
 		if (obstacle->counter ==  22 + obstacle->width/15){
 			wait = 1;
 			
-			if (flag_no_detection == 1){
-				flag_no_detection = 0;
+			if (idRecu != 0){
 				obstacle->counter = 0;
 				wait = 0;
 				
@@ -221,6 +220,7 @@ void moveObstacle(struct Obstacle *obstacle){
 					case 6: obstacle->color=YELLOW; break;
 					case 7: obstacle->color=ORANGE; break;
 				}
+				idRecu = 0;
 			}
 		}
 
