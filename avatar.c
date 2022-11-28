@@ -205,6 +205,7 @@ void moveObstacle(struct Obstacle *obstacle){
 			
 			//On entre si quelque chose a été envoyé
 			if (flag_go == 1){
+				flag_go = 0;
 				obstacle->counter = 0; //on envoie donc on reset
 				
 				obstacle->posx = 330;
