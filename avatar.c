@@ -74,8 +74,6 @@ void drawAvatar(struct Avatar *avatar){
 
 void drawDino(struct Obstacle *obstacle){
 	
-	obstacle->color=WHITE;
-	
 	int posy = obstacle->posy;
 	int id = obstacle->idTroupe;
 	int posx = obstacle->posx;
@@ -83,23 +81,31 @@ void drawDino(struct Obstacle *obstacle){
 	
 	if (id == 1){
 		drawDinos(posx, posy, color);
+		obstacle->length = 30;
+		obstacle->width = 30;
 	}
 	
 	if (id == 2){
 		drawDinos(posx, posy, color);
 		drawDinos(posx+30, posy+30, color);
+		obstacle->length = 60;
+		obstacle->width = 60;
 	}
 	
 	if (id == 3){
 		drawDinos(posx, posy+60, color);
 		drawDinos(posx+30, posy, color);
 		drawDinos(posx+60, posy+30, color);
+		obstacle->length = 90;
+		obstacle->width = 90;
 	}
 	
 	if (id == 4){
 		drawDinos(posx, posy, color);
 		drawDinos(posx+30, posy+30, color);
 		drawDinos(posx, posy+60, color);
+		obstacle->length = 90;
+		obstacle->width = 60;
 	}
 	
 	if (id == 5){
@@ -107,6 +113,8 @@ void drawDino(struct Obstacle *obstacle){
 		drawDinos(posx+30, posy, color);
 		drawDinos(posx+60, posy+30, color);
 		drawDinos(posx+60, posy+60, color);
+		obstacle->length = 90;
+		obstacle->width = 90;
 	}
 	
 	if (id == 6){
@@ -114,12 +122,16 @@ void drawDino(struct Obstacle *obstacle){
 		drawDinos(posx+30, posy, color);
 		drawDinos(posx+30, posy+60, color);
 		drawDinos(posx+60, posy+30, color);
+		obstacle->length = 90;
+		obstacle->width = 90;
 	}
 	
 	if (id == 7){
-		drawDinos(posx, posy+30, color);
-		drawDinos(posx+30, posy+60, color);
-		drawDinos(posx+60, posy+60, color);
+		drawDinos(posx, posy, color);
+		drawDinos(posx+30, posy+30, color);
+		drawDinos(posx+60, posy+30, color);
+		obstacle->length = 60;
+		obstacle->width = 90;
 	}
 	
 	if (id == 8){
@@ -127,10 +139,10 @@ void drawDino(struct Obstacle *obstacle){
 		drawDinos(posx+30, posy+60, color);
 		drawDinos(posx+30, posy+30, color);
 		drawDinos(posx+60, posy, color);
+		obstacle->length = 90;
+		obstacle->width = 90;
 	}
 	
-	obstacle->length = 90;
-	obstacle->width = 90;
 }
 
 void drawDinos(posx, posy, color){
@@ -208,11 +220,30 @@ void moveAvatar(struct Avatar *avatar){
 }
 
 void moveObstacle(struct Obstacle *obstacle){
+		
 		//On entre si l'obstacle a fini sa course <=> a dépassé l'écran
 		if (obstacle->counter >  22 + obstacle->width/15){
 			
 			//On entre si quelque chose a été envoyé
 			if (flag_go == 1){
+				
+				switch (color_switch){
+					case 0:
+						obstacle->color = WHITE;
+						break;
+					case 1:
+						obstacle->color = CYAN;
+						break;
+					case 2:
+						obstacle->color = GREEN;
+						break;
+					case 3:
+						obstacle->color = YELLOW;
+						break;
+					case 4:
+						obstacle->color = PINK;
+						break;
+			}
 				flag_go = 0;
 				obstacle->counter = 0; //on envoie donc on reset
 				
@@ -244,7 +275,17 @@ int lookColision(struct Avatar *avatar, struct Obstacle *obstacle){
 				LCD_FillScreen(BLACK);
 				char buffer[20] = {0};
 				sprintf(buffer, "GAME OVER");
-				LCD_SetCursor(45, 105);
+				LCD_SetCursor(45, 50);
+				LCD_SetTextSize(4);
+				LCD_SetTextColor(RED, BLACK);
+				LCD_Printf(buffer);
+				return 1;
+			}
+			if (avatar->posy <= obstacle->posy && avatar->posy + avatar->length > obstacle->posy) {
+				LCD_FillScreen(BLACK);
+				char buffer[20] = {0};
+				sprintf(buffer, "GAME OVER");
+				LCD_SetCursor(45, 50);
 				LCD_SetTextSize(4);
 				LCD_SetTextColor(RED, BLACK);
 				LCD_Printf(buffer);
