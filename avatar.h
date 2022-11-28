@@ -17,6 +17,7 @@ extern uint8_t idRecu;
 extern volatile float flag_go;
 
 
+
 struct Avatar {
 	int posy;
 	int previous_posy;
@@ -35,12 +36,15 @@ struct Obstacle {
 	int length;
 	int width;
 	int color;
-	
+	int idTroupe;
 	int counter;
 };
 
 void initGame(struct Avatar *avatar, struct Obstacle *obstacle);
 void drawAvatar(struct Avatar *avatar);
+void drawDino(struct Obstacle *obstacle);
+void drawDinos(int posx, int posy, int color);
+
 void moveAvatar(struct Avatar *avatar);
 void moveObstacle(struct Obstacle *obstacle);
 int lookColision(struct Avatar *avatar, struct Obstacle *obstacle);
