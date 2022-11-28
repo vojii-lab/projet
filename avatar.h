@@ -16,6 +16,8 @@ extern uint8_t posdinoRecu;
 extern uint8_t idRecu;
 extern volatile float flag_go;
 
+extern volatile int color_switch;
+
 
 
 struct Avatar {
