@@ -71,10 +71,13 @@ volatile float distance = 0;
 
 // parametre pour faire bouger le dino et envoyer les obstacles
 
-float scale = 210.0/25.0;                     // le scale est la valeur maximale voulu / l'écart max entre les mesures (30-5 = 25)
+float scale = 210.0/25.0;           // le scale est la valeur maximale voulu / l'écart max entre les mesures (30-5 = 25)
 volatile float compteur = 0;
 volatile float flag_no_detection = 0; 
 volatile float postx = 0;
+volatile float poswar = 0;
+volatile int score = 0;
+volatile int score_final = 0;
 
 volatile float flag_recu = 0;
 volatile float flag_go = 0;
@@ -118,6 +121,21 @@ void HAL_SYSTICK_Callback(void) {
 		speed = speed - 1;
 		}
 	
+	if (full_timer%1000 == 0){
+		if(!gameover){
+			score = score + 1;
+			LCD_SetCursor(156,0);
+			LCD_Printf("%d", score);
+		}
+		if(gameover){
+			score_final = score;
+			LCD_SetCursor(60,0);
+			LCD_Printf("score");
+			LCD_SetCursor(120,40);
+			LCD_Printf("%d", score_final);
+		}
+	}
+		
 	if (timer >= speed){
 		scroll = 1;
 		timer = 0;
@@ -229,8 +247,10 @@ int main(void)
 		data[2] = iddino;
 		
 		// si l'objet est plus loin que 30 cm trois fois de suite, alors on envoie un obstacle
-		if(flag_no_detection == 1){  // pour le test, on n'envoie pas un obstacle, mais on affiche une ligne ou la position devrait etre. 
-			LCD_DrawLine(100, postx, 110, postx, WHITE);
+		if(flag_no_detection == 1){			// pour le test, on n'envoie pas un obstacle, mais on affiche une ligne ou la position devrait etre. 
+			poswar = postx;
+			LCD_FillRect(70, poswar+20, 3, 20, RED);
+			LCD_FillRect(70, poswar+20+22, 3, 3, RED);
 		}
 		flag_no_detection = 0;
 		iddino = 0;
@@ -239,8 +259,8 @@ int main(void)
 		gameover = lookColision(&avatar, &obstacle);
 		if (gameover) {
 			HAL_Delay(5000);
-				initGame(&avatar, &obstacle);
-				drawAvatar(&avatar);
+			initGame(&avatar, &obstacle);
+			drawAvatar(&avatar);
 		}
   }
   /* USER CODE END 3 */
@@ -353,7 +373,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim3)
 							    flag_no_detection = 1;             // on set le flag a 1, pour trigger l'envoi des obstacles
 									compteur = 0;                      // et on remet le compteur à 0
 									postx = posdino;									// et la position envoyé (hauteur de l'obstacle) sera la derniere position de notre avatar
-                  iddino = 4; 		//à randomiser							
+                  iddino = rand()%8+1;							
 								}
 				    }
 						else {                                   // cas voulu: si la distance est entre 5 et 30
