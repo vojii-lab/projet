@@ -172,31 +172,6 @@ void moveAvatar(struct Avatar *avatar){
 	avatar->step++;
 	drawAvatar(avatar);
 	
-	
-	
-//		int move = rand()%3;
-//		
-//		if(move == 0){
-//			avatar->previous_posy = avatar->posy;
-//		}
-//		if(move == 1){
-//			avatar->previous_posy = avatar->posy;
-//			avatar->posy += 30;
-//			if(avatar->posy > 210)
-//				avatar->posy = 210;
-//		}
-//		if(move == 2){
-//			avatar->previous_posy = avatar->posy;
-//			avatar->posy -= 30;
-//			if(avatar->posy < 0)
-//				avatar->posy = 0;
-//		}
-//		
-//		avatar->step++;
-//		drawAvatar(avatar);
-//		if (move != 0){
-//			
-//		}
 }
 
 void moveObstacle(struct Obstacle *obstacle){
@@ -210,7 +185,7 @@ void moveObstacle(struct Obstacle *obstacle){
 				
 				obstacle->posx = 330;
 				obstacle->posy = posdinoRecu;
-				obstacle->length = 30*(5+2);
+				obstacle->length = 30*(2);
 				obstacle->width = 15*(5+2);
 				
 				//Puisque flag_go = 1, idRecu > 0, on determine l'obstacle à envoyer
