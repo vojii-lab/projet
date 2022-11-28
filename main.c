@@ -114,10 +114,14 @@ void HAL_SYSTICK_Callback(void) {
 	full_timer++;
 	timer++;
 	
+	if (full_timer%300 == 0){
+		speed = speed - 1;
+		}
+	
 	if (timer >= speed){
 		scroll = 1;
 		timer = 0;
-		//speed--;
+		
 	}
 }
 
