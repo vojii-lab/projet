@@ -68,7 +68,7 @@ void drawAvatar(struct Avatar *avatar){
 	LCD_DrawLine(posx+19,posy+0,posx+19,posy+28,color);
 	LCD_DrawLine(posx+20,posy+0,posx+20,posy+28,color);
 
-	// T�te
+	// Tête
 	LCD_DrawLine(posx+19,posy+3,posx+19,posy+4,COLOR_BACKGROUND); //oeil
 	LCD_DrawLine(posx+20,posy+3,posx+20,posy+4,COLOR_BACKGROUND); //oeil
 	LCD_DrawLine(posx+21,posy+0,posx+21,posy+20,color);
@@ -129,7 +129,7 @@ void drawAvatar(struct Avatar *avatar){
 	LCD_DrawLine(posx+19,posy+0,posx+19,posy+24,color);
 	LCD_DrawLine(posx+20,posy+0,posx+20,posy+23,color);
 
-	// T�te
+	// Tête
 	LCD_DrawLine(posx+19,posy+3,posx+19,posy+4,COLOR_BACKGROUND); //oeil
 	LCD_DrawLine(posx+20,posy+3,posx+20,posy+4,COLOR_BACKGROUND); //oeil
 	LCD_DrawLine(posx+21,posy+0,posx+21,posy+20,color);
@@ -200,18 +200,20 @@ void moveAvatar(struct Avatar *avatar){
 }
 
 void moveObstacle(struct Obstacle *obstacle){
-		if (obstacle->counter ==  22 + obstacle->width/15){
-			wait = 1;
+		//On entre si l'obstacle a fini sa course <=> a dépassé l'écran
+		if (obstacle->counter >  22 + obstacle->width/15){
 			
-			if (idRecu != 0){
-				obstacle->counter = 0;
-				wait = 0;
+			//On entre si quelque chose a été envoyé
+			if (flag_go == 1){
+				obstacle->counter = 0; //on envoie donc on reset
 				
 				obstacle->posx = 330;
 				obstacle->posy = posdinoRecu;
-				obstacle->length = 30*(rand()%5+2);
-				obstacle->width = 15*(rand()%5+2);
-				switch (rand()%7+1) {
+				obstacle->length = 30*(5+2);
+				obstacle->width = 15*(5+2);
+				
+				//Puisque flag_go = 1, idRecu > 0, on determine l'obstacle à envoyer
+				switch (idRecu) {
 					case 1: obstacle->color=BLUE; break;
 					case 2: obstacle->color=RED; break;
 					case 3: obstacle->color=GREEN; break;
@@ -220,17 +222,17 @@ void moveObstacle(struct Obstacle *obstacle){
 					case 6: obstacle->color=YELLOW; break;
 					case 7: obstacle->color=ORANGE; break;
 				}
+				//On reset, sait-on jamais
+				posdinoRecu = 0;
 				idRecu = 0;
 			}
 		}
 
-		obstacle->posx -= 15;
+		obstacle->posx -= 15; //15 est la largeur minimale d'un obstacle
 		LCD_FillRect(obstacle->posx+15,obstacle->posy,obstacle->width, obstacle->length,BLACK);
 		LCD_FillRect(obstacle->posx,obstacle->posy,obstacle->width, obstacle->length,obstacle->color);
 		
-		if (wait == 0){
-			obstacle->counter++;
-		}
+		obstacle->counter++;
 }
 
 int lookColision(struct Avatar *avatar, struct Obstacle *obstacle){
