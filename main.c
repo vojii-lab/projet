@@ -73,7 +73,6 @@ volatile float distance = 0;
 
 float scale = 210.0/25.0;           // le scale est la valeur maximale voulu / l'écart max entre les mesures (30-5 = 25)
 volatile float compteur = 0;
-volatile float flag_no_detection = 0; 
 volatile float postx = 0;
 volatile float poswar = 0;
 volatile int score = 0;
@@ -243,22 +242,18 @@ int main(void)
 		
 		while(!scroll);
 		scroll = 0;
-	// test de la semaine 1 
-	//	LCD_SetCursor(0,40); 
-	//	LCD_Printf(" dis: %f",distance);
 	
 		moveAvatar(&avatar);
 		moveObstacle(&obstacle);
 		data[1] = posdino;
 		data[2] = iddino;
 		
-		// si l'objet est plus loin que 30 cm trois fois de suite, alors on envoie un obstacle
-		if(flag_no_detection == 1){			// pour le test, on n'envoie pas un obstacle, mais on affiche une ligne ou la position devrait etre. 
-			poswar = postx;
+
+		if(idRecu != 0){	
+			poswar = posdinoRecu;
 			LCD_FillRect(70, poswar, 3, 20, RED);
 			LCD_FillRect(70, poswar+22, 3, 3, RED);
 		}
-		flag_no_detection = 0;
 		iddino = 0;
 		
 		
@@ -376,7 +371,6 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim3)
 							compteur ++;                           // on incrémente le compteur
 							if (compteur >= 3)                     // et on check si le compteur a atteint 3 (3 lectures de 35 cm consécutif)
 								{
-							    flag_no_detection = 1;             // on set le flag a 1, pour trigger l'envoi des obstacles
 									compteur = 0;                      // et on remet le compteur à 0
 									postx = posdino;									// et la position envoyé (hauteur de l'obstacle) sera la derniere position de notre avatar
                   iddino = rand()%8+1;							
